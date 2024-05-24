@@ -1,5 +1,6 @@
 package au.com.bytecode.opencsv;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class CSVAfter {
@@ -20,9 +21,14 @@ public class CSVAfter {
 		// CSVWriter will be closed after end of processing
 		csv.write(fileName, new CSVWriteProc() {
 			public void process(CSVWriter out) {
-				out.writeNext("Header1", "Header2");
-				out.writeNext("v11", "v12");
-				out.writeNext("v21", "v22");
+				try {
+					out.writeNext("Header1", "Header2");
+					out.writeNext("v11", "v12");
+					out.writeNext("v21", "v22");
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+
 			}
 		});
 		

@@ -58,7 +58,7 @@ public class UniCodeTest {
     }
 
     @Test
-    public void runUniCodeThroughCSVWriter() {
+    public void runUniCodeThroughCSVWriter() throws IOException {
         StringWriter sw = new StringWriter();
         CSVWriter writer = new CSVWriter(sw);
         writer.writeNext(UNICODE_ARRAY);
@@ -66,7 +66,7 @@ public class UniCodeTest {
     }
 
     @Test
-    public void runASCIIThroughCSVWriter() {
+    public void runASCIIThroughCSVWriter() throws IOException {
         StringWriter sw = new StringWriter();
         CSVWriter writer = new CSVWriter(sw);
         writer.writeNext(ASCII_ARRAY);

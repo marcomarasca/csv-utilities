@@ -36,8 +36,9 @@ public class ObjectCSVWriter<T> {
 	 *            The Writer that will receive the data.
 	 * @param clazz
 	 *            The class of the objects that will be written to thei stream.
+	 * @throws IOException 
 	 */
-	public ObjectCSVWriter(Writer out, Class<T> clazz) {
+	public ObjectCSVWriter(Writer out, Class<T> clazz) throws IOException {
 		if (out == null)
 			throw new IllegalArgumentException("Writer cannot be null");
 		if (clazz == null)
@@ -119,8 +120,9 @@ public class ObjectCSVWriter<T> {
 	 * Append a row to this writer.
 	 * 
 	 * @param row
+	 * @throws IOException 
 	 */
-	public void append(T row) {
+	public void append(T row) throws IOException {
 		// Extract the row
 		try {
 			for (int i = 0; i < fields.length; i++) {

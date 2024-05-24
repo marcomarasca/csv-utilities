@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -20,9 +21,13 @@ public class CSVTest {
 		DEFAULT.writeAndClose(w, new CSVWriteProc() {
 			@Override
 			public void process(CSVWriter out) {
-				out.writeNext("Col1", "Col2", "Col3");
-				out.writeNext("V1", "V2", "V3");
-				out.writeNext(",V,2,", "\"V2\"", "  V3  ");
+				try {
+					out.writeNext("Col1", "Col2", "Col3");
+					out.writeNext("V1", "V2", "V3");
+					out.writeNext(",V,2,", "\"V2\"", "  V3  ");
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 				
 			}
 		});
@@ -72,9 +77,13 @@ public class CSVTest {
 		CFG.writeAndClose(w, new CSVWriteProc() {
 			@Override
 			public void process(CSVWriter out) {
-				out.writeNext("Col1", "Col2", "Col3");
-				out.writeNext("V1", "V2", "V3");
-				out.writeNext("|V|2|", "*V2*", "  V3  ");
+				try {
+					out.writeNext("Col1", "Col2", "Col3");
+					out.writeNext("V1", "V2", "V3");
+					out.writeNext("|V|2|", "*V2*", "  V3  ");
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 				
 			}
 		});
