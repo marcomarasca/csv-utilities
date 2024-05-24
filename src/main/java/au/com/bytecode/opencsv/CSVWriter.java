@@ -18,7 +18,6 @@ package au.com.bytecode.opencsv;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,8 +34,6 @@ public class CSVWriter implements Closeable {
     public static final int INITIAL_STRING_SIZE = 128;
 
 	private Writer rawWriter;
-
-    private PrintWriter pw;
 
     private char separator;
 
@@ -132,7 +129,6 @@ public class CSVWriter implements Closeable {
      */
     public CSVWriter(Writer writer, char separator, char quotechar, char escapechar, String lineEnd) {
         this.rawWriter = writer;
-        this.pw = new PrintWriter(writer);
         this.separator = separator;
         this.quotechar = quotechar;
         this.escapechar = escapechar;
@@ -146,15 +142,16 @@ public class CSVWriter implements Closeable {
      * @param allLines
      *            a List of String[], with each String[] representing a line of
      *            the file.
+     * @throws IOException 
      */
-    public void writeAll(List<String[]> allLines)  {
+    public void writeAll(List<String[]> allLines) throws IOException  {
     	for (String[] line : allLines) {
 			writeNext(line);
 		}
     }
 
     protected void writeColumnNames(ResultSet rs)
-    	throws SQLException {
+    	throws SQLException, IOException {
 
     	writeNext(resultService.getColumnNames(rs));
     }
@@ -190,8 +187,9 @@ public class CSVWriter implements Closeable {
      * @param nextLine
      *            a string array with each comma-separated element as a separate
      *            entry.
+     * @throws IOException 
      */
-    public void writeNext(String... nextLine) {
+    public void writeNext(String... nextLine) throws IOException {
     	
     	if (nextLine == null)
     		return;
@@ -216,8 +214,7 @@ public class CSVWriter implements Closeable {
         }
         
         sb.append(lineEnd);
-        pw.write(sb.toString());
-
+        rawWriter.write(sb.toString());
     }
 
 	private boolean stringContainsSpecialCharacters(String line) {
@@ -247,7 +244,7 @@ public class CSVWriter implements Closeable {
      * @throws IOException if bad things happen
      */
     public void flush() throws IOException {
-        pw.flush();
+        rawWriter.flush();
     } 
 
     /**
@@ -258,15 +255,7 @@ public class CSVWriter implements Closeable {
      */
     public void close() throws IOException {
         flush();
-        pw.close();
         rawWriter.close();
-    }
-
-    /**
-     *  Checks to see if the there has been an error in the printstream. 
-     */
-    public boolean checkError() {
-        return pw.checkError();
     }
 
     public void setResultService(ResultSetHelper resultService) {
